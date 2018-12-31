@@ -1,0 +1,82 @@
+﻿---
+title: 九月工作阶段总结
+tags: 工作
+date: 2018-9-30 10:53:00
+---
+
+# 九月阶段总结
+
+> 今天是九月的最后一天，终于有时间总结一下最近的学习和工作
+> 记录下最近的大事件，首先自己进入了一家公司开始了自己的工作，工作很舒服，很庆幸做的也是自己喜欢的工作，我在部门负责硬件开发，其实也谈不上开发，毕竟自己学的东西比较少，也是由部门同事带着我学习和研究，同事对我都很好，这是最舒服的一点。
+> 其次就是自己的公司终于建的差不多了，准备毕业之后公司工作同步发展，开始自己的工作、创业混合前进策略。。。
+> 
+> ![](https://i.loli.net/2018/09/30/5bb01c579cda2.png)
+
+## 具体的工作成果
+
+> 还是先说工作，最近公司的第一个项目就是做工业仪器仪表的数据采集，我们团队进行元件选型到硬件对接，到程序编写，也是费了九牛二虎之力，最终效果还是很明显的，还是很成功的。尤其是代码部分，我也是研究了好几天才完成了单片机与RS485的通讯，成功读取仪表寄存器数据并对接机智云实现了数据的远程传输。
+
+
+```
+ float getrs485()//读取rs485,波特率：9600； 校验位：无； 停止位：1 位； 数据位：8；数据包长度为7字节
+{
+  int x, cnt,pmval,readcmd[7];
+  unsigned char gdata,eFlag,rbytes=0;
+  float A;
+  cnt=0;
+   eFlag =0;
+  while(mySerial.available()>0)
+  {
+    gdata = mySerial.read();//保存接收字符 
+   // Serial.print(gdata,HEX);
+    if(gdata==254&&eFlag==0)
+     {
+        eFlag=1;        
+    }
+    if(eFlag==1)
+    {
+        readcmd[rbytes++]=gdata;
+    }    
+    delay(2);
+    cnt++;
+    if(cnt>100)
+    return 0;
+    if(rbytes==7)//完整帧
+    {
+      break;
+      }   
+    }
+    if(rbytes==0)
+     return 0;
+/*Serial.println("");
+Serial.println(readcmd[0]);
+Serial.println(readcmd[1],HEX);
+Serial.println(readcmd[2],HEX);
+Serial.println(readcmd[3],HEX);
+Serial.println(readcmd[4],HEX);
+Serial.println(readcmd[5],HEX);
+Serial.println(readcmd[6],HEX);
+*/
+x= x+readcmd[3];
+x<<=8;  //左移8位
+x+= readcmd[4];  //相加
+A = x;
+if (A==0) A=4000;  //排除未校测时的误差，默认为零
+//A=A*1.2375/1000-4.75;  //单片机内部计算，有待调试
+x=0;
+return A;
+}
+```
+
+
+![](https://i.loli.net/2018/09/30/5bb01a2a90388.png)
+ 
+![](https://i.loli.net/2018/09/30/5bb01a8cbdac1.png)
+
+> 学习上的话，最近学校要搞学科竞赛，班里同学大多不会做，或者没时间做，最终这个艰巨的任务就交给了我，没曾想，班里同学，学院学弟，瞬间来了20几个人让我来做作品，真的也是相当无奈。没办法，昨天刚采购了物品，国庆七天假期准备加加班，再搞一波。
+
+
+![](https://i.loli.net/2018/09/30/5bb01bb0cfad2.jpg)
+
+> 而且令我高兴地另一件事就是，我之前把我在互联网＋参赛的作品卖给了一个大学生，他也靠着这个作品在北大获得了“国际创新创业大赛”的二等奖。很开心。
+
